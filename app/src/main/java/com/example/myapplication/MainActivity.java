@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     boolean isFirstNumber = true;//是否是第一个数字
 
+    boolean textView2HasResult = false;
+
     boolean noPoint = true;//判断是否有小数点
 
     boolean allowSignal = true;//只允许输入一个符号
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     StringBuilder details = new StringBuilder("");
 
+    TextView textView2 ;
 
     //获取按钮和设置监听
     @Override
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button multiple = (Button) findViewById(R.id.multiply);
         Button divide = (Button) findViewById(R.id.divide);
         Button equal = (Button) findViewById(R.id.equal);
+        TextView textView2 = (TextView)findViewById(R.id.textView2);
 
         //为所有按键设置监听事件
 
@@ -74,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         b7.setOnClickListener(this);
         b8.setOnClickListener(this);
         b9.setOnClickListener(this);
+        textView2.setOnClickListener(this);
 
         //符号
         pointL.setOnClickListener(this);
@@ -115,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 || id == R.id.minus
                 || id == R.id.multiply
                 || id == R.id.divide) {
-            operateChar(button, textView1);
+            operateChar(button, textView1,textView2);
             return;
         }
 
@@ -199,9 +204,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView2.setText(details);
         allowSignal = true;
         isFirstNumber = true;
+        noPoint = true;
+        textView2HasResult = false;
     }
 
-    public void operateChar(Button button, TextView textView1) {
+    public void operateChar(Button button, TextView textView1,TextView textView2) {
+        if(textView2HasResult){
+            allowSignal = true;
+            StringBuilder stringBuilder = new StringBuilder(textView2.getText().toString());
+            num1 = stringBuilder;
+            num2=new StringBuilder("");
+
+        }
         if (allowSignal) {
             if(details.length()!=0){
                 if(details.charAt(0)=='N'){
@@ -265,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 result = number1;
                 break;
         }
-
+        textView2HasResult=true;
         textView2.setText(String.valueOf(result));
     }
 
@@ -311,7 +325,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // TODO 变正负结合删除操作有点毛病   解决
-
     public void change(TextView textView1){
             if(details.length()==0){
                 Toast.makeText(MainActivity.this,"没有数字",Toast.LENGTH_SHORT).show();
